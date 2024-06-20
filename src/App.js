@@ -1,37 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import RecipeCard from './components/RecipeCard';
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
+import About from './pages/About'; 
 import './App.css';
+import { loadFavorites, saveFavorites } from './utils/localStorage'; 
 
 const App = () => {
   const APP_ID = '7e51f4ee';
   const APP_KEY = 'cfd0b058c130da02b7e5fed6657f2964';
-  const [food_recipes, setfood_recipes] = useState([]);
-  const [search_recipe, setSearch_recipe] = useState('');
-  const [search_query, setSearch_Query] = useState('chicken');
+
+  const [foodRecipes, setFoodRecipes] = useState([]);
+  const [searchRecipe, setSearchRecipe] = useState('');
+  const [searchQuery, setSearchQuery] = useState('chicken');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [favorites, setFavorites] = useState(loadFavorites());
+
+  const getRecipes = useCallback(async () => {
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      const response = await fetch(
+        `https://api.edamam.com/search?q=${searchQuery}&app_id=${APP_ID}&app_key=${APP_KEY}`
+      );
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setFoodRecipes(data.hits);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
-    getRecipesFunction();
-  }, [search_query]);
+    getRecipes();
+  }, [getRecipes]);
 
-  const getRecipesFunction = async () => {
-    const response = await fetch(
-      `https://api.edamam.com/search?q=${search_query}&app_id=${APP_ID}&app_key=${APP_KEY}`
-    );
-    const data = await response.json();
-    setfood_recipes(data.hits);
-  };
+  useEffect(() => {
+    saveFavorites(favorites);
+  }, [favorites]);
 
-  const updateSearchFunction = (e) => {
-    setSearch_recipe(e.target.value);
-  };
-
-  const getSearchFunction = (e) => {
+  const getSearch = (e) => {
     e.preventDefault();
-    setSearch_Query(search_recipe);
-    setSearch_recipe('');
+    setSearchQuery(searchRecipe);
+    setSearchRecipe('');
+  };
+
+  const addFavorite = (recipe) => {
+    if (!favorites.some((fav) => fav.label === recipe.label)) {
+      setFavorites([...favorites, recipe]);
+    }
+  };
+
+  const removeFavorite = (label) => {
+    setFavorites(favorites.filter((fav) => fav.label !== label));
   };
 
   return (
@@ -43,37 +71,21 @@ const App = () => {
             <Route
               path="/"
               element={
-                <>
-                  <form onSubmit={getSearchFunction} className="search-bar-container">
-                    <div className="search-bar">
-                      <input
-                        type="text"
-                        name="search"
-                        value={search_recipe}
-                        onChange={updateSearchFunction}
-                        placeholder="Search for recipes..."
-                      />
-                      <button type="submit">
-                        <i className="fas fa-search"></i>
-                      </button>
-                    </div>
-                  </form>
-                  <div className="recipes-container">
-                    {food_recipes.map((recipe) => (
-                      <RecipeCard key={recipe.recipe.label} recipe={recipe.recipe} />
-                    ))}
-                  </div>
-                </>
+                <Home
+                  searchRecipe={searchRecipe}
+                  setSearchRecipe={setSearchRecipe}
+                  getSearch={getSearch}
+                  isLoading={isLoading}
+                  isError={isError}
+                  foodRecipes={foodRecipes}
+                  addFavorite={addFavorite}
+                />
               }
             />
+            <Route path="/about" element={<About />} /> 
             <Route
-              path="/about"
-              element={
-                <div className="about-container">
-                  <h2>About Recipe Finder</h2>
-                  <p>This is a simple app to find recipes.</p>
-                </div>
-              }
+              path="/favorites"
+              element={<Favorites favorites={favorites} removeFavorite={removeFavorite} />}
             />
           </Routes>
         </div>

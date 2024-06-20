@@ -1,6 +1,8 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt, faHeart } from '@fortawesome/free-solid-svg-icons';
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, addFavorite, showAddFavoriteButton }) => {
   return (
     <div className="card">
       <img
@@ -17,9 +19,16 @@ const RecipeCard = ({ recipe }) => {
             <span key={index} className="block">{ingredient}</span>
           ))}
         </p>
-        <a href={recipe.url} target="_blank" rel="noopener noreferrer" className="btn">
-          View Recipe
-        </a>
+        <div className="button-container">
+          <a href={recipe.url} target="_blank" rel="noopener noreferrer" className="btn">
+            <FontAwesomeIcon icon={faExternalLinkAlt} /> 
+          </a>
+          {showAddFavoriteButton && (
+            <button onClick={() => addFavorite(recipe)} className="btn-favorite">
+              <FontAwesomeIcon icon={faHeart} /> 
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
