@@ -1,4 +1,3 @@
-
 import RecipeCard from '../components/RecipeCard'; 
 
 const Favorites = ({ favorites, removeFavorite }) => {

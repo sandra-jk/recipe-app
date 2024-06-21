@@ -1,33 +1,23 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 
-const RecipeCard = ({ recipe, addFavorite, showAddFavoriteButton }) => {
+
+const RecipeCard = ({ recipe, addFavorite }) => {
   return (
     <div className="card">
-      <img
-        className="card-img-top"
-        src={recipe.image}
-        alt={recipe.label}
-      />
+      <img className="card-img-top" src={recipe.image} alt={recipe.label} />
       <div className="card-body">
-        <h2 className="card-title">{recipe.label}</h2>
-        <h3 className="card-subtitle">{recipe.dishType ? recipe.dishType[0] : 'Dish Type'}</h3>
-        <p className="card-text">
-          <strong>Ingredients:</strong>
-          {recipe.ingredientLines.map((ingredient, index) => (
-            <span key={index} className="block">{ingredient}</span>
-          ))}
-        </p>
+        <h5 className="card-title">{recipe.label}</h5>
+        <p className="card-subtitle">{recipe.source}</p>
+        <p className="card-text">{recipe.ingredientLines.join(', ')}</p>
         <div className="button-container">
-          <a href={recipe.url} target="_blank" rel="noopener noreferrer" className="btn">
-            <FontAwesomeIcon icon={faExternalLinkAlt} /> 
+          <a href={recipe.url} className="btn" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faUtensils} /> 
           </a>
-          {showAddFavoriteButton && (
-            <button onClick={() => addFavorite(recipe)} className="btn-favorite">
-              <FontAwesomeIcon icon={faHeart} /> 
-            </button>
-          )}
+          <button className="btn-favorite" onClick={() => addFavorite(recipe)}>
+            <FontAwesomeIcon icon={faHeart} /> 
+          </button>
         </div>
       </div>
     </div>

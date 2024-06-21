@@ -1,35 +1,34 @@
 .about-container {
-    background-image: url(img/ella-olsson-rD3YrnhTmf0-unsplash.jpg); /* Replace with your image path */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 1000px; /* Ensure it covers the entire width */
-    min-height: 100vh; /* Full viewport height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-  }
-  
-  .content {
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.6); /* Add a semi-transparent background to make text readable */
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .action-button {
-    background-color: #ff8c00; /* Button color */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .action-button:hover {
-    background-color: #e67e00; /* Darker shade on hover */
-  }
-  
+  background-image: url('img/ella-olsson-rD3YrnhTmf0-unsplash.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%; 
+  min-height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}
+
+.content {
+  text-align: center;
+  background-color: rgba(116, 107, 107, 0.6); 
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.action-button {
+  background-color: #ff8c00; 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.action-button:hover {
+  background-color: #e67e00; 
+}

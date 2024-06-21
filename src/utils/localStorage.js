@@ -1,4 +1,3 @@
-// utils/localStorage.js
 export const loadFavorites = () => {
     try {
       const serializedFavorites = localStorage.getItem('favorites');
